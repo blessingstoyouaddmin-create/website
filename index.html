@@ -1,12 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blessings to You Centre</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Blessings to You Centre is a volunteer-run charitable thrift store in Palmerston, Ontario. Shop, donate, volunteer, and help support local community programs." />
+  <title>Blessings to You Centre | Palmerston, Ontario</title>
+
+  <!--
+    ============================================================
+    EASY UPDATE GUIDE
+    ============================================================
+    Most common changes can be made in the CONFIG section below.
+
+    To update hours:
+      Find: const HOURS = [ ... ]
+
+    To update contact info:
+      Find: const CONTACT = { ... }
+
+    To update the main page wording:
+      Find: const CONTENT = { ... }
+
+    To update donation/impact numbers:
+      Find: const STATS = [ ... ]
+
+    To update store locations:
+      Find: const LOCATIONS = [ ... ]
+
+    You should rarely need to edit the HTML below the CONFIG section.
+    ============================================================
+  -->
+
+  <style>
+    :root {
+      --cream: #fff8ed;
+      --paper: #ffffff;
+      --ink: #243126;
+      --muted: #5f6e63;
+      --green: #2f6f4e;
+      --green-dark: #1f4f36;
+      --gold: #f0b84f;
+      --gold-soft: #fff1cf;
+      --shadow: 0 24px 70px rgba(31, 79, 54, 0.16);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--cream), #fffdf8 44%, #f5fbf6);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+    .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+
+    .topbar { background: var(--green-dark); color: #fff; font-size: 0.95rem; }
+    .topbar .container { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; flex-wrap: wrap; }
+
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(255, 248, 237, 0.86);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(47, 111, 78, 0.12);
+    }
+
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; gap: 20px; }
+
+    .brand {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+      font-weight: 900; letter-spacing: -0.04em;
+      font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+    }
+
+    .logo {
+      width: 46px; height: 46px; border-radius: 16px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--green), #73a16d);
+      color: #fff; box-shadow: 0 12px 26px rgba(47, 111, 78, 0.25); font-size: 1.45rem;
+    }
+
+    .links { display: flex; gap: 18px; align-items: center; font-weight: 700; font-size: 0.95rem; }
+    .links a { text-decoration: none; color: var(--green-dark); }
+
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 13px 20px; border-radius: 999px; border: 0;
+      background: var(--green); color: #fff; text-decoration: none; font-weight: 800;
+      box-shadow: 0 16px 30px rgba(47, 111, 78, 0.24);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:hover { transform: translateY(-2px); background: var(--green-dark); box-shadow: 0 20px 38px rgba(47, 111, 78, 0.28); }
+    .button.alt { background: var(--gold); color: #3a2b0c; }
+    .button.ghost { background: #fff; color: var(--green-dark); border: 1px solid rgba(47, 111, 78, 0.2); box-shadow: none; }
+
+    .hero { padding: 74px 0 46px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr); gap: 42px; align-items: center; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(47, 111, 78, 0.18); background: rgba(255, 255, 255, 0.74);
+      color: var(--green-dark); padding: 8px 13px; border-radius: 999px;
+      font-weight: 850; font-size: 0.9rem; margin-bottom: 18px;
+    }
+
+    h1, h2, h3 { line-height: 1.05; margin: 0; letter-spacing: -0.05em; }
+    h1 { font-size: clamp(3.2rem, 8vw, 6.9rem); max-width: 780px; }
+    h2 { font-size: clamp(2.25rem, 5vw, 4.1rem); margin-bottom: 16px; }
+    h3 { font-size: 1.45rem; }
+
+    .hero p { font-size: clamp(1.12rem, 2.2vw, 1.35rem); color: var(--muted); max-width: 680px; margin: 24px 0 28px; }
+    .hero-actions, .section-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+    .hero-card {
+      background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px;
+      position: relative; overflow: hidden; border: 1px solid rgba(47, 111, 78, 0.1);
+    }
+
+    .hero-card:before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(circle at top right, rgba(240, 184, 79, 0.34), transparent 34%), radial-gradient(circle at bottom left, rgba(47, 111, 78, 0.16), transparent 38%);
+      pointer-events: none;
+    }
+
+    .hours-card { position: relative; z-index: 1; background: rgba(255, 255, 255, 0.86); border-radius: 24px; padding: 22px; border: 1px solid rgba(47, 111, 78, 0.12); }
+    .hours-row { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(47, 111, 78, 0.1); font-weight: 720; }
+    .hours-row:last-child { border-bottom: 0; }
+    .hours-row span:last-child { color: var(--green-dark); text-align: right; }
+
+    .notice { margin-top: 16px; background: var(--gold-soft); border-radius: 18px; padding: 14px; font-weight: 750; color: #5f4312; }
+    section { padding: 70px 0; }
+
+    .intro { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 28px; align-items: start; }
+    .lead { color: var(--muted); font-size: 1.12rem; margin: 0; }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+    .card { background: rgba(255, 255, 255, 0.82); border: 1px solid rgba(47, 111, 78, 0.11); border-radius: 24px; padding: 24px; box-shadow: 0 16px 44px rgba(31, 79, 54, 0.08); }
+    .icon { width: 50px; height: 50px; border-radius: 18px; background: var(--gold-soft); display: grid; place-items: center; font-size: 1.45rem; margin-bottom: 16px; }
+
+    .stat-band { background: linear-gradient(135deg, var(--green-dark), var(--green)); color: #fff; border-radius: 34px; padding: 34px; box-shadow: var(--shadow); display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .stat strong { display: block; font-size: clamp(2.1rem, 5vw, 4rem); line-height: 1; letter-spacing: -0.06em; }
+    .stat span { color: rgba(255, 255, 255, 0.82); font-weight: 650; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+    .feature { min-height: 390px; border-radius: 32px; padding: 32px; background: var(--paper); box-shadow: 0 18px 55px rgba(31, 79, 54, 0.1); border: 1px solid rgba(47, 111, 78, 0.1); }
+    .feature.green { background: linear-gradient(135deg, #284d36, #407b55); color: #fff; }
+    .feature.green p, .feature.green li { color: rgba(255, 255, 255, 0.84); }
+
+    ul.clean { list-style: none; padding: 0; margin: 20px 0 0; }
+    ul.clean li { padding: 12px 0 12px 34px; border-bottom: 1px solid rgba(47, 111, 78, 0.12); position: relative; color: var(--muted); font-weight: 650; }
+    ul.clean li:before { content: "✓"; position: absolute; left: 0; top: 12px; color: var(--green); font-weight: 900; }
+    .feature.green ul.clean li { border-color: rgba(255, 255, 255, 0.18); }
+    .feature.green ul.clean li:before { color: var(--gold); }
+
+    .locations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 24px; }
+    .location-card { padding: 24px; background: #fff; border-radius: 24px; border: 1px solid rgba(47, 111, 78, 0.13); }
+    .location-card p { color: var(--muted); margin-bottom: 0; }
+
+    .cta { text-align: center; background: radial-gradient(circle at top, rgba(240, 184, 79, 0.24), transparent 34%), linear-gradient(135deg, #fff, #eef8ef); border-radius: 36px; padding: 46px 24px; box-shadow: var(--shadow); border: 1px solid rgba(47, 111, 78, 0.1); }
+    .cta p { max-width: 720px; margin: 18px auto 26px; color: var(--muted); font-size: 1.1rem; }
+
+    footer { padding: 44px 0; background: var(--green-dark); color: #fff; }
+    footer .container { display: grid; grid-template-columns: 1.3fr 0.7fr 0.7fr; gap: 24px; }
+    footer a { color: #fff; text-decoration: none; }
+    footer p, footer li { color: rgba(255,255,255,0.78); }
+    footer ul { list-style: none; padding: 0; margin: 0; }
+    footer li { margin: 8px 0; }
+    .small { font-size: 0.9rem; color: rgba(255,255,255,0.68); }
+
+    @media (max-width: 880px) {
+      .links { display: none; }
+      .hero-grid, .intro, .split, footer .container { grid-template-columns: 1fr; }
+      .cards, .stat-band, .locations { grid-template-columns: 1fr; }
+      .hero { padding-top: 44px; }
+      section { padding: 48px 0; }
+      .stat-band { padding: 26px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Blessings to You Centre</h1>
-  <p>Welcome. Our website is coming soon.</p>
+  <div class="topbar">
+    <div class="container">
+      <span id="topbar-location"></span>
+      <span id="topbar-note"></span>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <nav aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="Blessings to You Centre home">
+          <span class="logo" aria-hidden="true">✦</span>
+          <span id="brand-name"></span>
+        </a>
+        <div class="links">
+          <a href="#shop">Shop</a>
+          <a href="#donate-goods">Donate Goods</a>
+          <a href="#impact">Impact</a>
+          <a href="#volunteer">Volunteer</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow" id="hero-eyebrow"></div>
+          <h1 id="hero-title"></h1>
+          <p id="hero-description"></p>
+          <div class="hero-actions" id="hero-actions"></div>
+        </div>
+
+        <aside class="hero-card" aria-label="Store hours">
+          <div class="hours-card">
+            <h2 style="font-size:2rem;margin-bottom:14px;">Store Hours</h2>
+            <div id="hours-list"></div>
+            <div class="notice" id="hours-note"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="shop">
+      <div class="container intro">
+        <div>
+          <div class="eyebrow">Shop with purpose</div>
+          <h2 id="shop-title"></h2>
+        </div>
+        <p class="lead" id="shop-description"></p>
+      </div>
+      <div class="container cards" id="shop-cards"></div>
+    </section>
+
+    <section id="impact">
+      <div class="container">
+        <div class="stat-band" id="stats"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container split">
+        <article class="feature green">
+          <div class="eyebrow" style="background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.2);">Community impact</div>
+          <h2 id="impact-title"></h2>
+          <p id="impact-description"></p>
+          <ul class="clean" id="impact-list"></ul>
+        </article>
+
+        <article class="feature" id="donate-goods">
+          <div class="eyebrow">Donate gently used goods</div>
+          <h2 id="donate-title"></h2>
+          <p class="lead" id="donate-description"></p>
+          <ul class="clean" id="donate-list"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="volunteer">
+      <div class="container cta">
+        <div class="eyebrow">Volunteer with us</div>
+        <h2 id="volunteer-title"></h2>
+        <p id="volunteer-description"></p>
+        <div class="section-actions" style="justify-content:center;" id="volunteer-actions"></div>
+      </div>
+    </section>
+
+    <section id="locations">
+      <div class="container">
+        <div class="intro">
+          <div>
+            <div class="eyebrow">Visit us</div>
+            <h2 id="locations-title"></h2>
+          </div>
+          <p class="lead" id="locations-description"></p>
+        </div>
+        <div class="locations" id="locations-list"></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container cta">
+        <div class="eyebrow">Contact</div>
+        <h2 id="contact-title"></h2>
+        <p id="contact-description"></p>
+        <div class="section-actions" style="justify-content:center;" id="contact-actions"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>
+        <h3 id="footer-name"></h3>
+        <p id="footer-description"></p>
+        <p class="small" id="footer-small"></p>
+      </div>
+      <div>
+        <h3>Visit</h3>
+        <ul id="footer-visit"></ul>
+      </div>
+      <div>
+        <h3>Quick links</h3>
+        <ul>
+          <li><a href="#shop">Shop</a></li>
+          <li><a href="#donate-goods">Donate goods</a></li>
+          <li><a href="#volunteer">Volunteer</a></li>
+          <li><a id="footer-donate-link" target="_blank" rel="noopener">Give financially</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /*
+      ============================================================
+      CONFIG SECTION — EDIT THIS PART FOR NORMAL WEBSITE UPDATES
+      ============================================================
+    */
+
+    const CONTACT = {
+      organizationName: "Blessings to You Centre",
+      tagline: "Palmerston’s volunteer-run charitable thrift stores",
+      phoneDisplay: "519-343-3082",
+      phoneLink: "tel:15193433082",
+      email: "blessingsthriftpalmerston@gmail.com",
+      facebookUrl: "https://www.facebook.com/p/Blessings-To-You-Centre-100063803070609/",
+      donateUrl: "https://www.canadahelps.org/en/charities/blessings-to-you-free-center/",
+      topbarNote: "Open Tue–Sat • Volunteer-run • Community-funded"
+    };
+
+    const HOURS = [
+      ["Monday", "Closed"],
+      ["Tuesday", "1:00–5:00 PM"],
+      ["Wednesday", "1:00–5:00 PM"],
+      ["Thursday", "1:00–8:00 PM"],
+      ["Friday", "1:00–5:00 PM"],
+      ["Saturday", "9:00 AM–12:00 PM"],
+      ["Sunday", "Closed"]
+    ];
+
+    const HOURS_NOTE = "Donation drop-offs are welcome during posted hours unless otherwise announced.";
+
+    const LOCATIONS = [
+      {
+        name: "Store One",
+        address: "203 Main Street, Palmerston, ON N0G 2P0",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=203+Main+Street+Palmerston+Ontario"
+      },
+      {
+        name: "Store Two",
+        address: "237 Main Street, Palmerston, ON N0G 2P0",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=237+Main+Street+Palmerston+Ontario"
+      }
+    ];
+
+    const STATS = [
+      { number: "$65K+", label: "donated to community groups in 2025" },
+      { number: "2", label: "Main Street Palmerston locations" },
+      { number: "100+", label: "community volunteers helping the mission" }
+    ];
+
+    const SHOP_CARDS = [
+      {
+        icon: "👕",
+        title: "Clothing & footwear",
+        text: "Gently used clothing, shoes, linens, and accessories for individuals and families."
+      },
+      {
+        icon: "🏠",
+        title: "Home goods",
+        text: "Useful household items, décor, books, toys, games, puzzles, and seasonal finds."
+      },
+      {
+        icon: "🤝",
+        title: "Low-cost help",
+        text: "Affordable shopping that keeps useful items circulating and helps community dollars go further."
+      }
+    ];
+
+    const CONTENT = {
+      hero: {
+        title: "Good finds. Good prices. Good poured back into the community.",
+        description: "Blessings to You Centre welcomes everyone to shop for clothing, household goods, and gifts while helping support local charities, families, youth programs, food banks, recreation, and community projects."
+      },
+      shop: {
+        title: "Every purchase helps somebody nearby.",
+        description: "Find affordable clothing, footwear, linens, household items, books, toys, seasonal goods, décor, gifts, and practical everyday items. The stores are operated by volunteers, and proceeds are returned to the community through sponsorships and funding assistance."
+      },
+      impact: {
+        title: "Local generosity, local results.",
+        description: "Blessings to You Centre has supported local schools, student nutrition, children’s recreation, food banks, health care, public recreation, community organizations, and families who need practical assistance.",
+        bullets: [
+          "Student nutrition and school programs",
+          "Food banks and family supports",
+          "Youth recreation, sports, camps, and life skills",
+          "Local charities and community projects"
+        ]
+      },
+      donateGoods: {
+        title: "Clear out clutter. Create good.",
+        description: "Your clean, usable donations help stock the stores and turn everyday items into community support.",
+        bullets: [
+          "Clothing, footwear, and linens",
+          "Household items, décor, books, toys, and gifts",
+          "Please donate items that are clean, complete, and in good condition",
+          "When in doubt, call first before bringing large or unusual items"
+        ]
+      },
+      volunteer: {
+        title: "Have a few hours to give?",
+        description: "Volunteers sort donations, help customers, prepare displays, clean and organize items, maintain the stores, and help keep the mission moving. Whether you can help weekly, monthly, or seasonally, your time matters."
+      },
+      locations: {
+        title: "Two stores on Main Street.",
+        description: "Both locations are in Palmerston, Ontario. Stop in to shop, donate, ask about volunteering, or learn more about how Blessings to You Centre supports the community."
+      },
+      contact: {
+        title: "Questions, donations, volunteering, or funding requests?",
+        description: "Reach out to the store team. For the fastest answer, call during store hours or send an email with your name, contact information, and what you need help with."
+      },
+      footer: {
+        description: "Volunteer-run charitable thrift stores in Palmerston, Ontario. Shop, donate, volunteer, and help practical kindness move through the community.",
+        small: "Charitable registration information is available through CanadaHelps and public charity records."
+      }
+    };
+
+    /*
+      ============================================================
+      PAGE BUILDER — LEAVE THIS PART ALONE UNLESS CHANGING DESIGN
+      ============================================================
+    */
+
+    const $ = (id) => document.getElementById(id);
+
+    function setText(id, text) {
+      const element = $(id);
+      if (element) element.textContent = text;
+    }
+
+    function makeButton(label, href, className = "button") {
+      return `<a class="${className}" href="${href}"${href.startsWith("http") ? " target=\"_blank\" rel=\"noopener\"" : ""}>${label}</a>`;
+    }
+
+    function renderList(id, items) {
+      $(id).innerHTML = items.map(item => `<li>${item}</li>`).join("");
+    }
+
+    function renderSite() {
+      const locationSummary = LOCATIONS.map(location => location.address.split(", ON")[0]).join(" & ");
+
+      setText("topbar-location", locationSummary);
+      setText("topbar-note", CONTACT.topbarNote);
+      setText("brand-name", CONTACT.organizationName);
+      setText("hero-eyebrow", CONTACT.tagline);
+      setText("hero-title", CONTENT.hero.title);
+      setText("hero-description", CONTENT.hero.description);
+
+      $("hero-actions").innerHTML = [
+        makeButton("Plan your visit", "#locations"),
+        makeButton("Donate items", "#donate-goods", "button alt"),
+        makeButton("Give financially", CONTACT.donateUrl, "button ghost")
+      ].join("");
+
+      $("hours-list").innerHTML = HOURS.map(([day, time]) => `
+        <div class="hours-row"><span>${day}</span><span>${time}</span></div>
+      `).join("");
+      setText("hours-note", HOURS_NOTE);
+
+      setText("shop-title", CONTENT.shop.title);
+      setText("shop-description", CONTENT.shop.description);
+      $("shop-cards").innerHTML = SHOP_CARDS.map(card => `
+        <article class="card">
+          <div class="icon">${card.icon}</div>
+          <h3>${card.title}</h3>
+          <p>${card.text}</p>
+        </article>
+      `).join("");
+
+      $("stats").innerHTML = STATS.map(stat => `
+        <div class="stat"><strong>${stat.number}</strong><span>${stat.label}</span></div>
+      `).join("");
+
+      setText("impact-title", CONTENT.impact.title);
+      setText("impact-description", CONTENT.impact.description);
+      renderList("impact-list", CONTENT.impact.bullets);
+
+      setText("donate-title", CONTENT.donateGoods.title);
+      setText("donate-description", CONTENT.donateGoods.description);
+      renderList("donate-list", CONTENT.donateGoods.bullets);
+
+      setText("volunteer-title", CONTENT.volunteer.title);
+      setText("volunteer-description", CONTENT.volunteer.description);
+      $("volunteer-actions").innerHTML = [
+        makeButton(`Call ${CONTACT.phoneDisplay}`, CONTACT.phoneLink),
+        makeButton("Email us", `mailto:${CONTACT.email}`, "button ghost")
+      ].join("");
+
+      setText("locations-title", CONTENT.locations.title);
+      setText("locations-description", CONTENT.locations.description);
+      $("locations-list").innerHTML = LOCATIONS.map(location => `
+        <div class="location-card">
+          <h3>${location.name}</h3>
+          <p>${location.address}</p>
+          <p><a href="${location.mapUrl}" target="_blank" rel="noopener">Open in Google Maps</a></p>
+        </div>
+      `).join("");
+
+      setText("contact-title", CONTENT.contact.title);
+      setText("contact-description", CONTENT.contact.description);
+      $("contact-actions").innerHTML = [
+        makeButton(CONTACT.phoneDisplay, CONTACT.phoneLink),
+        makeButton(CONTACT.email, `mailto:${CONTACT.email}`, "button ghost"),
+        makeButton("Facebook", CONTACT.facebookUrl, "button ghost")
+      ].join("");
+
+      setText("footer-name", CONTACT.organizationName);
+      setText("footer-description", CONTENT.footer.description);
+      setText("footer-small", CONTENT.footer.small);
+      $("footer-visit").innerHTML = [
+        ...LOCATIONS.map(location => `<li>${location.address}</li>`),
+        `<li><a href="${CONTACT.phoneLink}">${CONTACT.phoneDisplay}</a></li>`
+      ].join("");
+      $("footer-donate-link").href = CONTACT.donateUrl;
+    }
+
+    renderSite();
+  </script>
 </body>
 </html>
+
