@@ -291,6 +291,7 @@
         <h2 id="contact-title"></h2>
         <p id="contact-description"></p>
         <div class="section-actions" style="justify-content:center;" id="contact-actions"></div>
+        <div class="card" id="technical-contact" style="max-width:640px;margin:28px auto 0;text-align:left;"></div>
       </div>
     </section>
   </main>
@@ -331,6 +332,10 @@
       phoneDisplay: "519-343-3082",
       phoneLink: "tel:15193433082",
       email: "blessingsthriftpalmerston@gmail.com",
+      technicalContactName: "Les Williams",
+      technicalContactRole: "Technical Contact",
+      technicalContactEmail: "admin@blessingstoyoucentre.org",
+      charityNumber: "833966567RR0001",
       facebookUrl: "https://www.facebook.com/p/Blessings-To-You-Centre-100063803070609/",
       donateUrl: "https://www.canadahelps.org/en/charities/blessings-to-you-free-center/",
       topbarNote: "Open Tue–Sat • Volunteer-run • Community-funded"
@@ -521,12 +526,23 @@
         makeButton("Facebook", CONTACT.facebookUrl, "button ghost")
       ].join("");
 
+      $("technical-contact").innerHTML = `
+        <h3>${CONTACT.technicalContactRole}</h3>
+        <p><strong>${CONTACT.technicalContactName}</strong></p>
+        <p><a href="mailto:${CONTACT.technicalContactEmail}">${CONTACT.technicalContactEmail}</a></p>
+        <p class="lead" style="font-size:1rem;">For website, domain, email, and technical verification matters.</p>
+        <p class="lead" style="font-size:1rem;">Registered Canadian charity number: <strong>${CONTACT.charityNumber}</strong></p>
+      `;
+
       setText("footer-name", CONTACT.organizationName);
       setText("footer-description", CONTENT.footer.description);
       setText("footer-small", CONTENT.footer.small);
       $("footer-visit").innerHTML = [
         ...LOCATIONS.map(location => `<li>${location.address}</li>`),
-        `<li><a href="${CONTACT.phoneLink}">${CONTACT.phoneDisplay}</a></li>`
+        `<li><a href="${CONTACT.phoneLink}">${CONTACT.phoneDisplay}</a></li>`,
+        `<li>${CONTACT.technicalContactRole}: ${CONTACT.technicalContactName}</li>`,
+        `<li><a href="mailto:${CONTACT.technicalContactEmail}">${CONTACT.technicalContactEmail}</a></li>`,
+        `<li>Charity No. ${CONTACT.charityNumber}</li>`
       ].join("");
       $("footer-donate-link").href = CONTACT.donateUrl;
     }
@@ -535,4 +551,3 @@
   </script>
 </body>
 </html>
-
